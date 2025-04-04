@@ -1,0 +1,185 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Language to Text Conversion{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Sign Language to Text Conversion</h1>
+
+    <div class="row">
+        <div class="col-md-6 text-center">
+            <img src="{{ url_for('video_feed') }}" id="video-feed" class="img-fluid" alt="Live Video Stream">
+        </div>
+
+        <div class="col-md-6">
+            <div class="d-flex align-items-center justify-content-between">
+                <h3 class="mb-0">Recognized Character:</h3>
+                <button id="clear-letter-btn" class="btn clear-btn">Clear Letter</button>
+            </div>
+            <p id="character">_</p>
+            
+            <div class="d-flex align-items-center justify-content-between mt-3">
+                <h3 class="mb-0">Predicted Word:</h3>
+                <button id="clear-word-btn" class="btn clear-btn">Clear Word</button>
+            </div>
+            <p id="predicted-word" class="mt-2">_</p>
+            
+            
+            
+            <h3>Sentence:</h3>
+            <p id="sentence-text"></p>
+            <div class="d-flex gap-2">
+                <button id="add-word-btn" class="btn btn-primary flex-fill">Add Word to Sentence</button>
+                <button id="clear-sentence-btn" class="btn btn-secondary flex-fill">Clear Sentence</button>
+            </div>
+            
+            <button id="speak-btn" class="btn btn-warning w-100 mt-2">Speak Sentence</button>
+            
+            <button id="predict-btn" class="btn btn-success w-100">Start Prediction</button>
+
+            <h3>Word Suggestions:</h3>
+            <button class="suggestion-btn" id="suggestion1"></button>
+            <button class="suggestion-btn" id="suggestion2"></button>
+            <button class="suggestion-btn" id="suggestion3"></button>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let isPredicting = false;
+    let word = "";
+    let sentence = "";
+    // Function to speak the sentence using Google API
+    function speakSentence() {
+        let text = document.getElementById("sentence-text").innerText;
+        
+        if (text.trim() === "") {
+            alert("Sentence is empty! Add words first.");
+            return;
+        }
+
+        let speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US";  // Set language to English
+        speech.volume = 1;  // Volume (0 to 1)
+        speech.rate = 1;    // Speed (1 is normal)
+        speech.pitch = 1;   // Pitch (1 is normal)
+
+        window.speechSynthesis.speak(speech);
+    }
+
+    // Event listener for speaking the sentence
+    document.getElementById("speak-btn").addEventListener("click", speakSentence);
+
+
+    function updateText() {
+        if (!isPredicting) return;
+
+        fetch("/predict")
+            .then(response => response.json())
+            .then(data => {
+                let symbol = data.symbol;
+                document.getElementById("character").innerText = symbol;
+
+                if (symbol !== "blank") {
+                    word += symbol;
+                    document.getElementById("predicted-word").innerText = word;
+                    fetchWordSuggestions(word);
+                }
+            })
+            .catch(error => console.error("Error fetching prediction:", error));
+
+        setTimeout(updateText, 1000);
+    }
+
+    function fetchWordSuggestions(word) {
+        fetch(`/word_suggestions?word=${word}`)
+            .then(response => response.json())
+            .then(data => {
+                let suggestions = data.suggestions || [];
+                
+                document.getElementById("suggestion1").innerText = suggestions[0] || "";
+                document.getElementById("suggestion2").innerText = suggestions[1] || "";
+                document.getElementById("suggestion3").innerText = suggestions[2] || "";
+            })
+            .catch(error => console.error("Error fetching suggestions:", error));
+    }
+
+    // Function to add clicked suggestion to the word field
+    function addSuggestionToWord(suggestion) {
+        word = suggestion;
+        document.getElementById("predicted-word").innerText = word;
+    }
+
+    // Function to add the word to the sentence
+    function addWordToSentence() {
+        if (word.trim() !== "") {
+            sentence += (sentence ? " " : "") + word;  // Append word with a space
+            document.getElementById("sentence-text").innerText = sentence;
+            word = "";  // Clear the word area
+            document.getElementById("predicted-word").innerText = "_";
+        }
+    }
+
+    // Function to clear the predicted word
+    function clearWord() {
+        document.getElementById("predicted-word").innerText = "_";
+        word = "";  // Reset the word variable
+    }
+
+    // Function to clear the entire sentence
+    function clearSentence() {
+        document.getElementById("sentence-text").innerText = "";
+    }
+
+    // Function to clear recognized character
+    function clearLetter() {
+        document.getElementById("character").innerText = "_";
+    }
+
+    // Event listener for the Clear Letter button
+    document.getElementById("clear-letter-btn").addEventListener("click", clearLetter);
+
+
+    // Function to add the predicted word to the sentence
+    document.getElementById("add-word-btn").addEventListener("click", function () {
+        let word = document.getElementById("predicted-word").innerText.trim();
+        if (word !== "_" && word !== "") {
+            let sentence = document.getElementById("sentence-text").innerText;
+            document.getElementById("sentence-text").innerText = sentence ? sentence + " " + word : word;
+            clearWord();  // Clear the word after adding it to the sentence
+        }
+    });
+
+    // Event listeners for buttons
+    document.getElementById("clear-word-btn").addEventListener("click", clearWord);
+    document.getElementById("clear-sentence-btn").addEventListener("click", clearSentence);
+    document.getElementById("speak-btn").addEventListener("click", speakSentence);
+
+
+    // Event listeners for suggestion buttons
+    document.getElementById("suggestion1").addEventListener("click", function () {
+        addSuggestionToWord(this.innerText);
+    });
+    document.getElementById("suggestion2").addEventListener("click", function () {
+        addSuggestionToWord(this.innerText);
+    });
+    document.getElementById("suggestion3").addEventListener("click", function () {
+        addSuggestionToWord(this.innerText);
+    });
+
+    // Event listener for adding word to sentence
+    document.getElementById("add-word-btn").addEventListener("click", addWordToSentence);
+
+    // Start/Stop prediction button
+    document.getElementById("predict-btn").addEventListener("click", function () {
+        isPredicting = !isPredicting;
+        document.getElementById("predict-btn").innerText = isPredicting ? "Stop Prediction" : "Start Prediction";
+        if (isPredicting) updateText();
+    });
+
+
+</script>
+{% endblock %}

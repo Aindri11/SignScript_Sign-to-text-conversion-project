@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Sign to Text Conversion{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+  <h1 class="display-4">Welcome to Sign2Text</h1>
+  <p class="lead">Real-time conversion of sign language to text using state-of-the-art machine learning.</p>
+  <hr class="my-4">
+  <p>Our project uses advanced computer vision techniques to recognize hand gestures and convert them into corresponding text, making communication more accessible.</p>
+  <a class="btn btn-primary btn-lg" href="{{ url_for('conversion') }}" role="button" style="background-color: #6F909A">Get Started</a>
+</div>
+{% endblock %}

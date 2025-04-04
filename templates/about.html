@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}About - Sign2Text Conversion{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4" style="font-weight: 700; color: #2C3E50;">About Sign2Text</h1>
+
+    <div class="row align-items-center">
+        <!-- Left: Image -->
+        <div class="col-md-5 text-center">
+            <img src="{{ url_for('static', filename='images/sign-language.jpg') }}" 
+                alt="Sign Language Recognition" 
+                class="img-fluid" 
+                style="border-radius: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); max-width: 100%;">
+        </div>
+
+        <!-- Right: Description -->
+        <div class="col-md-7">
+            <p class="lead">
+                <strong>Sign2Text</strong> is an advanced AI-powered system designed to bridge communication gaps for the deaf and hard-of-hearing community. By leveraging **computer vision** and **deep learning**, it translates **hand gestures into text**, making interactions more accessible and inclusive.
+            </p>
+            <h4 class="mt-4" style="color: #34495E;">How It Works:</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">📷 Captures live video of hand gestures.</li>
+                <li class="list-group-item">🖐 Extracts the **Region of Interest (ROI)** for accurate analysis.</li>
+                <li class="list-group-item">🤖 Processes the image through a trained **neural network**.</li>
+                <li class="list-group-item">🔤 Predicts the corresponding **text output**.</li>
+                <li class="list-group-item">✅ Enhances text accuracy with **intelligent word suggestions**.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <blockquote class="blockquote">
+            <p class="mb-0" style="font-size: 1.3rem; font-style: italic;">"Empowering communication, one gesture at a time."</p>
+            <footer class="blockquote-footer">Sign2Text Team</footer>
+        </blockquote>
+    </div>
+
+    <div class="mt-5">
+        <h3 class="text-center" style="color: #34495E;">🌍 Our Mission</h3>
+        <p class="text-center">
+            We strive to **enhance accessibility** and **redefine communication** for individuals who rely on sign language. Our hope is that <strong>Sign2Text</strong> serves as a stepping stone towards a **more inclusive world** through the power of technology.
+        </p>
+    </div>
+</div>
+{% endblock %}

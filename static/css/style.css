@@ -1,0 +1,135 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #FFF7F3;
+    /* Soft pinkish-white background */
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+.footer {
+    background-color: #343a40;
+    color: white;
+}
+
+/* Jumbotron (Home Page) */
+.jumbotron {
+    background: url('../images/your_home_background.jpg') center center/cover no-repeat;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+    padding: 50px;
+    position: relative;
+}
+
+.jumbotron::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.29);
+    /* Semi-transparent black overlay */
+    z-index: 1;
+}
+
+.jumbotron>* {
+    position: relative;
+    z-index: 2;
+}
+
+/* General button styling */
+button {
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Primary Button */
+.btn-primary,
+.btn-success {
+    background-color: #9AAFB6;
+    /* Muted Blue-Gray */
+    color: white;
+}
+
+.btn-primary:hover,
+.btn-success:hover {
+    background-color: #B3C8CF;
+    /* Slightly darker */
+    transform: scale(1.05);
+}
+
+/* Secondary Button */
+.btn-secondary {
+    background-color: #6F909A;
+    /* Soft Teal-Gray */
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #89A8B2;
+    /* Slightly darker */
+    transform: scale(1.05);
+}
+
+/* Clear & Danger Buttons */
+.btn-danger,
+.clear-btn {
+    background-color: #9AAFB6;
+    /* Muted Blue-Gray */
+    color: white;
+}
+
+.btn-danger:hover,
+.clear-btn:hover {
+    background-color: #B3C8CF;
+    /* Darker Blue-Gray */
+    transform: scale(1.05);
+}
+
+/* Speak Button */
+.btn-warning {
+    background-color: #6F909A;
+    /* Soft Teal-Gray */
+    color: white;
+}
+
+.btn-warning:hover {
+    background-color: #89A8B2;
+    transform: scale(1.05);
+}
+
+/* Suggestion Buttons */
+.suggestion-btn {
+    background-color: #9AAFB6;
+    /* Muted Blue-Gray */
+    color: white;
+    padding: 8px 15px;
+    margin: 5px;
+    transition: all 0.3s ease-in-out;
+}
+
+.suggestion-btn:hover {
+    background-color: #B3C8CF;
+    transform: scale(1.05);
+}
+
+/* Spacing between buttons */
+#speak-btn {
+    margin-bottom: 15px;
+    /* Adds space below the Speak button */
+}
+
+/* Image Styling */
+.img-fluid {
+    margin-bottom: 20px;
+}
